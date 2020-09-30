@@ -22,7 +22,7 @@ package com.owncloud.android.data.file.datasource
 import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource
 import com.owncloud.android.data.files.datasources.mapper.OCFileMapper
 import com.owncloud.android.data.files.db.FileDao
-import com.owncloud.android.testutil.OC_FILE
+import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
@@ -35,8 +35,8 @@ class OCLocalFileDataSourceTest {
     private val dao = mockk<FileDao>(relaxed = true)
     private val mapper = OCFileMapper()
 
-    private val dummy = OC_FILE.copy(id = 0)
-    private val dummy_entity = mapper.toEntity(OC_FILE)
+    private val dummy = OC_FOLDER.copy(id = 0)
+    private val dummy_entity = mapper.toEntity(OC_FOLDER)
 
     @Before
     fun init() {

@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
  * @author Christian Schabesberger
  * Copyright (C) 2020 ownCloud GmbH.
  *
@@ -17,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.spyk
@@ -28,30 +29,38 @@ import io.mockk.verify
 import org.junit.Assert
 import org.junit.Test
 
-class GetFileByIdUseCaseTest {
+class SaveFileOrFolderUseCaseTest {
+    private val fileRepository: FileRepository = spyk()
+    private val useCase = SaveFileOrFolderUseCase(fileRepository)
+    private val file = OC_FILE
+    private val folder = OC_FOLDER
+    private val useCaseParamsFile = SaveFileOrFolderUseCase.Params(file)
+    private val useCaseParamsFolder = SaveFileOrFolderUseCase.Params(folder)
 
-    private val repository: FileRepository = spyk()
-    private val useCase = GetFileByIdUseCase(repository)
-    private val useCaseParams = GetFileByIdUseCase.Params(OC_FOLDER.id!!)
-
-    @Test
-    fun getFileByIdSuccess() {
-        every { repository.getFileById(useCaseParams.fileId) } returns OC_FOLDER
-
-        val useCaseResult = useCase.execute(useCaseParams)
-
+    private fun testOkWithParams(params: SaveFileOrFolderUseCase.Params) {
+        val useCaseResult = useCase.execute(params)
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertFalse(useCaseResult.isError)
-        Assert.assertEquals(OC_FOLDER, useCaseResult.getDataOrNull())
+        Assert.assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { repository.getFileById(useCaseParams.fileId) }
+        verify(exactly = 1) {fileRepository.saveFile(params.fileToUpload)}
     }
 
     @Test
-    fun getFileByIdException() {
-        every { repository.getFileById(useCaseParams.fileId) } throws UnauthorizedException()
+    fun `execute - ok - OC_FILE`() {
+        testOkWithParams(useCaseParamsFile)
+    }
 
-        val useCaseResult = useCase.execute(useCaseParams)
+    @Test
+    fun `execute - ok - OC_FOLDER`() {
+        testOkWithParams(useCaseParamsFolder)
+    }
+
+    @Test
+    fun `execute - ko - OC_FILE`() {
+        every { fileRepository.saveFile(any()) } throws UnauthorizedException()
+
+        val useCaseResult = useCase.execute(useCaseParamsFile)
 
         Assert.assertFalse(useCaseResult.isSuccess)
         Assert.assertTrue(useCaseResult.isError)
@@ -59,6 +68,7 @@ class GetFileByIdUseCaseTest {
         Assert.assertNull(useCaseResult.getDataOrNull())
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { repository.getFileById(useCaseParams.fileId) }
+        verify(exactly = 1) { fileRepository.saveFile(useCaseParamsFile.fileToUpload) }
+
     }
 }

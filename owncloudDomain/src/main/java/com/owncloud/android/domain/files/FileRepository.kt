@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Christian Schabesberger
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,4 +28,5 @@ interface FileRepository {
     fun getFileById(fileId: Long): OCFile?
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun refreshFolder(remotePath: String)
+    fun saveFile(file: OCFile)
 }
