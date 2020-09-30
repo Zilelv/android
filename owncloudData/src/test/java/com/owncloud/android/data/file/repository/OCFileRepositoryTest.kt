@@ -23,6 +23,7 @@ import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
+import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_FOLDER
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import io.mockk.every
@@ -178,5 +179,11 @@ class OCFileRepositoryTest {
         verify(exactly = 1) {
             localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
         }
+    }
+
+    @Test
+    fun `saveFile - ok - OC_FILE`() {
+        ocFileRepository.saveFile(OC_FILE)
+        verify(exactly = 1) {localFileDataSource.saveFile(OC_FILE)}
     }
 }
