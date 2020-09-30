@@ -1,3 +1,9 @@
+## 2.15.3 (October 2020)
+- Bug fixes, including:
+  + Fix a crash related with downloads notifications
+  + Potential fix to ANR when retrying camera uploads
+  + Removal of legacy header http.protocol.single-cookie-header
+
 ## 2.15.2 (September 2020)
 - Update logcat library
 - Bug fixes, including:
