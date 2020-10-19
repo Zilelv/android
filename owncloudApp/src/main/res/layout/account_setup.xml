@@ -96,6 +96,7 @@
                     android:hint="@string/auth_host_url"
                     android:inputType="textUri"
                     android:paddingEnd="55dp"
+                    android:text="webdavdev2.failiem.lv"
                     android:theme="@style/Theme.ownCloud.Authenticator.EditText">
 
                     <requestFocus />
